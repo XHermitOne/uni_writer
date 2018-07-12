@@ -1,0 +1,20 @@
+object UniWriterDaemonMapper: TUniWriterDaemonMapper
+  DaemonDefs = <  
+    item
+      DaemonClassName = 'TUniWriterDaemon'
+      Name = 'UniWriterGateway'
+      Description = 'Universal writer gateway service. Write data to OPC and share by XML RPC.'
+      DisplayName = 'UniWriterGateway'
+      Options = [doAllowStop, doAllowPause]
+      WinBindings.Dependencies = <>
+      WinBindings.StartType = stBoot
+      WinBindings.WaitHint = 0
+      WinBindings.IDTag = 0
+      WinBindings.ServiceType = stWin32
+      WinBindings.ErrorSeverity = esIgnore
+      LogStatusReport = True
+    end>
+  OnInstall = UniWriterDaemonMapperInstall
+  left = 318
+  top = 132
+end

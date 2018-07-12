@@ -1,0 +1,12 @@
+object UniWriterDaemon: TUniWriterDaemon
+  OldCreateOrder = False
+  OnStart = DataModuleStart
+  OnStop = DataModuleStop
+  AfterInstall = DataModuleAfterInstall
+  AfterUnInstall = DataModuleAfterUnInstall
+  Height = 188
+  HorizontalOffset = 449
+  VerticalOffset = 334
+  Width = 188
+  PPI = 120
+end
