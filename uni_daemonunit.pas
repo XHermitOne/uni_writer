@@ -8,7 +8,8 @@ unit uni_daemonunit;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, DaemonApp;
+  Classes, SysUtils, FileUtil, DaemonApp,
+  engine;
 
 type
 
@@ -57,7 +58,7 @@ end;
 procedure TUniWriterDaemon.DataModuleStart(Sender: TCustomDaemon;
   var OK: Boolean);
 begin
-  engine.WRITER_ENGINE := TICReader.Create(nil);
+  engine.WRITER_ENGINE := TICWriter.Create(nil);
   //engine.WRITER_ENGINE.RegRpcMethods;
   engine.WRITER_ENGINE.StartServer;
 end;

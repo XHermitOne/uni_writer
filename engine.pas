@@ -447,14 +447,16 @@ var
   dst_type_name: AnsiString;
   opc_server_name: AnsiString;
   address: AnsiString;
-  opc_result: AnsiString;
+  opc_result: Boolean;
+  value: AnsiString;
 
 begin
   dst_type_name := TRpcParameter(List[0]).AsString;
   opc_server_name := TRpcParameter(List[1]).AsString;
   address := TRpcParameter(List[2]).AsString;
+  value := TRpcParameter(List[3]).AsString;
 
-  opc_result := WriteValueAsString(dst_type_name, [opc_server_name], address);
+  opc_result := WriteValueAsString(dst_type_name, [opc_server_name], address, value);
 
   {return a message showing what was sent}
   Return.AddItem(opc_result);
@@ -468,21 +470,33 @@ var
   opc_server_name: AnsiString;
   addresses: Array of String;
   opc_result: TStringList;
+  values: Array of String;
   i: Integer;
+  opc_array: IRpcArray;
 
 begin
   dst_type_name := TRpcParameter(List[0]).AsString;
   opc_server_name := TRpcParameter(List[1]).AsString;
 
-  SetLength(addresses, List.Count - 2);
-  for i := 0 to List.Count - 3 do
+  opc_array := TRpcParameter(List[1]).AsArray;
+  SetLength(addresses, opc_array.Count);
+  for i := 0 to opc_array.Count do
   begin
-    addresses[i] := TRpcParameter(List[i + 2]).AsString;
+    addresses[i] := TRpcParameter(opc_array[i]).AsString;
     log.DebugMsgFmt('Запись тега <tag%d>. Адрес <%s>', [i, addresses[i]]);
   end;
 
-  opc_result := WriteValuesAsStrings(dst_type_name, [opc_server_name], addresses);
+  opc_array := TRpcParameter(List[2]).AsArray;
+  SetLength(values, opc_array.Count);
+  for i := 0 to opc_array.Count do
+  begin
+    values[i] := TRpcParameter(opc_array[i]).AsString;
+    log.DebugMsgFmt('Запись тега <tag%d>. Значение <%s>', [i, values[i]]);
+  end;
+
+  opc_result := WriteValuesAsStrings(dst_type_name, [opc_server_name], addresses, values);
   addresses := nil;
+  values := nil;
 
   {return a message showing what was sent}
   if opc_result <> nil then
