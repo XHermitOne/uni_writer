@@ -22,6 +22,7 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
+        <CommandLineParams Value="--install"/>
       </local>
     </RunParams>
     <RequiredPackages Count="3">
@@ -194,6 +195,11 @@
       <OtherUnitFiles Value="utils;xml_rpc;data_ctrl;opc_client"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
+    <Linking>
+      <Debugging>
+        <UseHeaptrc Value="True"/>
+      </Debugging>
+    </Linking>
   </CompilerOptions>
   <Debugging>
     <Exceptions Count="3">

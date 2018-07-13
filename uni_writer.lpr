@@ -117,7 +117,7 @@ Uses
   { add your units here };
 
 begin
-  Application.Title:='UniWriterGateway Daemon';
+  Application.Title:='Daemon application';
   { Чтение параметров коммандной строки }
   if Application.HasOption('p', 'port') then
     try

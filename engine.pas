@@ -20,7 +20,7 @@ const
   RUN_MODE_LOOP: AnsiString = 'loop';
   RUN_MODE_DIAGNOSTIC: AnsiString = 'diagnostic';
 
-  DEFAULT_XML_RPC_PORT: Integer = 8080;
+  DEFAULT_XML_RPC_PORT: Integer = 8081;
 
 type
     {
@@ -126,7 +126,7 @@ type
 
 var
   { Порт по умолчанию для обработки XML RPC }
-  XML_RPC_PORT: Integer = 8080;
+  XML_RPC_PORT: Integer = 8081;
 
   {
   Объявление глобального объекта движка
@@ -437,7 +437,7 @@ begin
   log.DebugMsgFmt('Test echo. You just sent: <%s>', [Msg]);
 
   {return a message showing what was sent}
-  Return.AddItem('You just sent: ' + Msg);
+  Return.AddItem('UniWriter. You just sent: ' + Msg);
 end;
 
 { Функция записи данных в приемник удаленного вызова процедур }
