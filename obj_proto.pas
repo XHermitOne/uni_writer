@@ -66,6 +66,8 @@ type
     { Фунция записи данных }
     //function Write(aValues: TStringList): Boolean; virtual;
     function Write(aAddresses: TStringList; aValues: TStringList): Boolean; virtual;
+    function WriteString(sAddress: AnsiString; sValue: AnsiString): Boolean; virtual;
+    function WriteInteger(sAddress: AnsiString; iValue: Integer): Boolean; virtual;
     { Запись значений по адресам }
     function WriteAddresses(aAddresses: Array Of String; aValues: Array Of String): TStringList; virtual;
 
@@ -197,6 +199,16 @@ end;
 Фунция записи данных
 }
 function TICObjectProto.Write(aAddresses: TStringList; aValues: TStringList): Boolean;
+begin
+  Result := False;
+end;
+
+function TICObjectProto.WriteString(sAddress: AnsiString; sValue: AnsiString): Boolean;
+begin
+  Result := False;
+end;
+
+function TICObjectProto.WriteInteger(sAddress: AnsiString; iValue: Integer): Boolean;
 begin
   Result := False;
 end;

@@ -74,6 +74,22 @@ type
     function Write(aAddresses: TStringList; aValues: TStringList): Boolean; override;
 
     {
+    Фунция записи данных
+    @param sAddress Адрес записываемаего значения
+    @param sValue Записываемое значение в виде строки
+    @return True - запись прошла успешно / False - ошибка записи
+    }
+    function WriteString(sAddress: AnsiString; sValue: AnsiString): Boolean; override;
+
+    {
+    Фунция записи данных
+    @param sAddress Адрес записываемаего значения
+    @param iValue Записываемое значение в виде целого числа
+    @return True - запись прошла успешно / False - ошибка записи
+    }
+    function WriteInteger(sAddress: AnsiString; iValue: Integer): Boolean; override;
+
+    {
     Функция записи данных по адресам
     @param aAddresses Массив адресов записываемых значений
     @param aValues Список записываемых значений
@@ -263,6 +279,123 @@ end;
 function TICOPCServerNode.Write(aAddresses: TStringList; aValues: TStringList): Boolean;
 begin
   Result := False;
+end;
+
+function TICOPCServerNode.WriteString(sAddress: AnsiString; sValue: AnsiString): Boolean;
+var
+  i: Integer;
+  log_tags: AnsiString;
+  group_name: AnsiString;
+  tags: TStrDictionary;
+  grp: TGroup;
+  tag_item: TTagItem;
+  //value: AnsiString;
+
+begin
+  Result := False;
+
+  group_name := UNKNOWN_GROUP_NAME;
+  //
+  log_tags := LineEnding;
+  try
+    // Сначала добавить адреса в свойства
+    if Properties <> nil then
+      Properties.Clear
+    else
+      Properties := TStrDictionary.Create;
+
+    log_tags := log_tags + 'tag0' + ' = ' + sValue + LineEnding;
+    // log.DebugMsg(Format('tag%d', [i]) + ' = ' + AnsiString(aValues[i]));
+    Properties.AddStrValue('tag0', sValue);
+
+    // Сначала адреса указать в свойствах
+    FOPCClient := TOPCClient.Create(nil);
+    FOPCClient.ServerName := FOPCServerName;
+
+    tags := CreateTags;
+
+    grp := TGroup.Create(group_name, 500, 0);
+    for i := 0 to tags.Count - 1 do
+    begin
+      tag_item := TTagItem.Create(tags.GetKey(i), tags.GetStrValue(tags.GetKey(i)), VT_BSTR, acRead);
+      grp.AddTag(tag_item);
+    end;
+    FOPCClient.TagList.AddGroup(grp);
+
+    FOPCClient.Connect;
+
+    // Запись значения тега
+    FOPCClient.SetTagString(FOPCClient.FindSGroupSTag(group_name, tags.GetKey(i)), sValue);
+
+    FOPCClient.Disconnect;
+
+    tags.Free;
+
+  except
+    FOPCClient.Disconnect;
+    tags.Free;
+
+    log.FatalMsgFmt('Write addresses value in <%s> %s', [ClassName, log_tags]);
+  end;
+end;
+
+function TICOPCServerNode.WriteInteger(sAddress: AnsiString; iValue: Integer): Boolean;
+var
+  i: Integer;
+  log_tags: AnsiString;
+  group_name: AnsiString;
+  tags: TStrDictionary;
+  grp: TGroup;
+  tag_item: TTagItem;
+
+begin
+  Result := False;
+
+  group_name := UNKNOWN_GROUP_NAME;
+  //
+  log_tags := LineEnding;
+  try
+    // Сначала добавить адреса в свойства
+    if Properties <> nil then
+      Properties.Clear
+    else
+      Properties := TStrDictionary.Create;
+
+    log_tags := log_tags + 'tag0' + ' = ' + IntToStr(iValue) + LineEnding;
+    // log.DebugMsg(Format('tag%d', [i]) + ' = ' + AnsiString(aValues[i]));
+    Properties.AddStrValue('tag0',
+                           { Преобразование элемента списка параметров в AnsiString:}
+                           IntToStr(iValue));
+
+    // Сначала адреса указать в свойствах
+    FOPCClient := TOPCClient.Create(nil);
+    FOPCClient.ServerName := FOPCServerName;
+
+    tags := CreateTags;
+
+    grp := TGroup.Create(group_name, 500, 0);
+    for i := 0 to tags.Count - 1 do
+    begin
+      tag_item := TTagItem.Create(tags.GetKey(i), tags.GetStrValue(tags.GetKey(i)), VT_BSTR, acRead);
+      grp.AddTag(tag_item);
+    end;
+    FOPCClient.TagList.AddGroup(grp);
+
+    FOPCClient.Connect;
+
+    // Запись значения тега
+    FOPCClient.SetTagLongint(FOPCClient.FindSGroupSTag(group_name, tags.GetKey(i)), iValue);
+
+    FOPCClient.Disconnect;
+
+    tags.Free;
+
+  except
+    FOPCClient.Disconnect;
+    tags.Free;
+
+    log.FatalMsgFmt('Write addresses value in <%s> %s', [ClassName, log_tags]);
+  end;
 end;
 
 function TICOPCServerNode.WriteAddresses(aAddresses: Array Of String; aValues: Array Of String): TStringList;
