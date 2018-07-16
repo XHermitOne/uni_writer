@@ -333,22 +333,17 @@ end;
 function TICWriter.WriteValueAsString(sDstTypeName: AnsiString; const aArgs: Array Of Const; sAddress: AnsiString; sValue: AnsiString): Boolean;
 var
   ctrl_obj: TICObjectProto;
-  str_list: TStringList;
 
 begin
   Result := False;
   ctrl_obj := nil;
-  str_list := nil;
   try
     ctrl_obj := CreateRegDataCtrlArgs(self, sDstTypeName, aArgs);
-    str_list := ctrl_obj.WriteAddresses([sAddress], [sValue]);
-    Result := True;
+    Result := ctrl_obj.WriteString(sAddress, sValue);
   except
     log.FatalMsgFmt('Ошибка записи значения <%s> по адресу <%s>', [sValue, sAddress]);
   end;
 
-  if str_list <> nil then
-    str_list.Free;
   if ctrl_obj <> nil then
     ctrl_obj.Free;
 end;
@@ -428,6 +423,15 @@ begin
       MethodHandler.Method := @WriteValueAsStringRpcMethod;
       MethodHandler.Signature := 'string (string myval)';
       MethodHandler.Help := 'Write value as string to data destination';
+      FRpcServer.RegisterMethodHandler(MethodHandler);
+      // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+      MethodHandler := TRpcMethodHandler.Create;
+      MethodHandler.Name := 'destinations.WriteValueAsInteger';
+      MethodHandler.Method := @WriteValueAsIntegerRpcMethod;
+      MethodHandler.Signature := 'string (string myval)';
+      MethodHandler.Help := 'Write value as integer to data destination';
       FRpcServer.RegisterMethodHandler(MethodHandler);
       // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

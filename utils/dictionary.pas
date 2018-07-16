@@ -23,6 +23,17 @@ type
     end;
 
     {
+    Класс объектов целых значений для хранения в словаре
+    }
+    TObjInteger = class(TObject)
+    private
+       { Значение }
+       FValue: Integer;
+    public
+       property Value: Integer read FValue write FValue;
+    end;
+
+    {
     Класс объектов даты-времени для хранения в словаре
     }
     TObjDateTime = class(TObject)
@@ -148,6 +159,24 @@ type
        @param slValue Значение TStringList
        }
        function SetStrList(sKey: AnsiString; slValue: TStringList): Boolean;
+
+       {
+       Добавить целое в словарь
+       @param sKey Ключ
+       @param iValue Целое
+       }
+       function AddIntValue(sKey: AnsiString; iValue: Integer): LongInt;
+       {
+       Получить целое из словаря по ключу
+       @param sKey Ключ
+       }
+       function GetIntValue(sKey: AnsiString): Integer;
+       {
+       Установить целое в словарь
+       @param sKey Ключ
+       @param iValue Wtkjt
+       }
+       function SetIntValue(sKey: AnsiString; iValue: Integer): Boolean;
 
     end;
 
@@ -478,6 +507,55 @@ begin
      obj := GetByName(sKey) As TObjStringList;
      obj.Value := slValue;
      result := True;
+end;
+
+{
+Добавить целое в словарь
+@param sKey Ключ
+@param iValue Целое
+}
+function TStrDictionary.AddIntValue(sKey: AnsiString; iValue: Integer): LongInt;
+var
+  obj: TObjInteger;
+begin
+  obj := TObjInteger.Create;
+  obj.Value := iValue;
+  Result := AddObject(sKey, obj);
+end;
+
+{
+Получить целое из словаря по ключу
+@param sKey Ключ
+}
+function TStrDictionary.GetIntValue(sKey: AnsiString): Integer;
+var
+   obj: TObjInteger;
+begin
+    Result := 0;
+    obj := GetByName(sKey) As TObjInteger;
+    if obj <> nil then
+       Result := obj.Value;
+end;
+
+{
+Установить целое в словарь
+@param sKey Ключ
+@param iValue Wtkjt
+}
+function TStrDictionary.SetIntValue(sKey: AnsiString; iValue: Integer): Boolean;
+var
+   obj: TObjInteger;
+begin
+     if not HasKey(sKey) then
+     begin
+        AddIntValue(sKey, iValue);
+        Result := True;
+        exit;
+     end;
+
+     obj := GetByName(sKey) As TObjInteger;
+     obj.Value := iValue;
+     Result := True;
 end;
 
 end.

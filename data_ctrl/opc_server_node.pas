@@ -289,7 +289,7 @@ var
   tags: TStrDictionary;
   grp: TGroup;
   tag_item: TTagItem;
-  //value: AnsiString;
+  tag_name: AnsiString;
 
 begin
   Result := False;
@@ -305,7 +305,7 @@ begin
       Properties := TStrDictionary.Create;
 
     log_tags := log_tags + 'tag0' + ' = ' + sValue + LineEnding;
-    // log.DebugMsg(Format('tag%d', [i]) + ' = ' + AnsiString(aValues[i]));
+    log.DebugMsg('tag0 = ' + sValue);
     Properties.AddStrValue('tag0', sValue);
 
     // Сначала адреса указать в свойствах
@@ -317,7 +317,9 @@ begin
     grp := TGroup.Create(group_name, 500, 0);
     for i := 0 to tags.Count - 1 do
     begin
-      tag_item := TTagItem.Create(tags.GetKey(i), tags.GetStrValue(tags.GetKey(i)), VT_BSTR, acRead);
+      tag_name := tags.GetKey(i);
+      log.DebugMsgFmt('Добавление тега <%s>. Адрес <%s>', [tag_name, sAddress]);
+      tag_item := TTagItem.Create(tag_name, sAddress, VT_BSTR, acWrite);
       grp.AddTag(tag_item);
     end;
     FOPCClient.TagList.AddGroup(grp);
@@ -325,12 +327,12 @@ begin
     FOPCClient.Connect;
 
     // Запись значения тега
-    FOPCClient.SetTagString(FOPCClient.FindSGroupSTag(group_name, tags.GetKey(i)), sValue);
+    FOPCClient.SetTagString(FOPCClient.FindSGroupSTag(group_name, 'tag0'), sValue);
 
     FOPCClient.Disconnect;
-
     tags.Free;
 
+    Result := True;
   except
     FOPCClient.Disconnect;
     tags.Free;
@@ -347,6 +349,7 @@ var
   tags: TStrDictionary;
   grp: TGroup;
   tag_item: TTagItem;
+  tag_name: AnsiString;
 
 begin
   Result := False;
@@ -362,10 +365,8 @@ begin
       Properties := TStrDictionary.Create;
 
     log_tags := log_tags + 'tag0' + ' = ' + IntToStr(iValue) + LineEnding;
-    // log.DebugMsg(Format('tag%d', [i]) + ' = ' + AnsiString(aValues[i]));
-    Properties.AddStrValue('tag0',
-                           { Преобразование элемента списка параметров в AnsiString:}
-                           IntToStr(iValue));
+    log.DebugMsg('tag0 = ' + IntToStr(iValue));
+    Properties.AddIntValue('tag0', iValue);
 
     // Сначала адреса указать в свойствах
     FOPCClient := TOPCClient.Create(nil);
@@ -376,7 +377,9 @@ begin
     grp := TGroup.Create(group_name, 500, 0);
     for i := 0 to tags.Count - 1 do
     begin
-      tag_item := TTagItem.Create(tags.GetKey(i), tags.GetStrValue(tags.GetKey(i)), VT_BSTR, acRead);
+      tag_name := tags.GetKey(i);
+      log.DebugMsgFmt('Добавление тега <%s>. Адрес <%s>', [tag_name, sAddress]);
+      tag_item := TTagItem.Create(tag_name, sAddress, VT_I4, acWrite);
       grp.AddTag(tag_item);
     end;
     FOPCClient.TagList.AddGroup(grp);
@@ -384,12 +387,12 @@ begin
     FOPCClient.Connect;
 
     // Запись значения тега
-    FOPCClient.SetTagLongint(FOPCClient.FindSGroupSTag(group_name, tags.GetKey(i)), iValue);
+    FOPCClient.SetTagLongint(FOPCClient.FindSGroupSTag(group_name, 'tag0'), iValue);
 
     FOPCClient.Disconnect;
-
     tags.Free;
 
+    Result := True;
   except
     FOPCClient.Disconnect;
     tags.Free;
