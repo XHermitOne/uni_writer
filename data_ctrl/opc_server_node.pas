@@ -9,6 +9,8 @@
 Изменить умолчания... -> Добавить -> Поиск -> <Все> и <АНОНИМНЫЙ ВХОД> -> OK ->
 Выставить галки <Удаленный доступ>, <Удаленный запуск>, <Локальная активация>, <Удаленная активация> ->
 OK
+
+Версия: 0.0.2.1
 }
 
 unit opc_server_node;
@@ -23,6 +25,8 @@ uses
     opc_client, tag_list;
 
 const
+  OPC_SRV_NODE_TYPE: AnsiString = 'OPC_SERVER_NODE';
+
   RESERV_PROPERTIES: Array [1..4] Of String = ('type', 'name', 'description', 'opc_server');
 
   UNKNOWN_GROUP_NAME: AnsiString = 'UNKNOWN_GROUP';
@@ -53,49 +57,112 @@ type
     { Выбрать описания тегов из свойств }
     function CreateTags(): TStrDictionary;
 
+    //{
+    //Фунция чтения данных
+    //@param sValues Список строк адресов читаемых значений
+    //@param Список строк прочитанных значений
+    //}
+    //function Read(aValues: TStringList): TStringList; override;
+    //{
+    //Функция чтения данных по адресам
+    //@param sValues Массив адресов читаемых значений
+    //@param Список строк прочитанных значений
+    //}
+    //function ReadAddresses(aValues: Array Of String): TStringList; override;
+    //{
+    //Фунция записи данных
+    //@param aValues Список записываемых значений
+    //@return True - запись прошла успешно / False - ошибка записи
+    //}
+    //function Write(aValues: TStringList): Boolean; override;
+
     {
     Фунция чтения данных
-    @param sValues Список строк адресов читаемых значений
-    @param Список строк прочитанных значений
+    @param sAddresses Список адресов для чтения
+    @param dtTime: Время актуальности за которое необходимо получить данные.
+                  Если не определено, то берется текущее системное время.
+    @return Список прочитанных значений.
     }
-    function Read(aValues: TStringList): TStringList; override;
+    function Read(sAddresses: TStringList; dtTime: TDateTime = 0): TStringList; override;
     {
-    Функция чтения данных по адресам
-    @param sValues Массив адресов читаемых значений
-    @param Список строк прочитанных значений
+    Чтение значений по адресам
+    @param sAddresses Массив адресов для чтения
+    @param dtTime: Время актуальности за которое необходимо получить данные.
+                  Если не определено, то берется текущее системное время.
+    @return Список прочитанных значений.
     }
-    function ReadAddresses(aValues: Array Of String): TStringList; override;
+    function ReadAddresses(sAddresses: Array Of String; dtTime: TDateTime = 0): TStringList; override;
+    //{
+    //Чтение значения по адресу
+    //@param sAddress Строка адреса для чтения
+    //@param dtTime: Время актуальности за которое необходимо получить данные.
+    //              Если не определено, то берется текущее системное время.
+    //@return Прочитанное значение в виде строки.
+    //}
+    //function ReadAddress(sAddress: AnsiString; dtTime: TDateTime = 0): AnsiString; virtual;
+    //{
+    //Чтение всех внутренних данных, описанных в свойствах.
+    //@param dtTime: Время актуальности за которое необходимо получить данные.
+    //              Если не определено, то берется текущее системное время.
+    //@return Список прочитанных значений.
+    //}
+    //function ReadAll(dtTime: TDateTime = 0): TStringList; virtual;
+
+    //{
+    //Чтение значений исторических данных по адресам
+    //@param sAddresses Массив адресов для чтения
+    //@param dtTime: Время актуальности за которое необходимо получить данные.
+    //               Если не определено, то берется текущее системное время.
+    //@param iValueTimeCount: Количество считываемых записей.
+    //@param sValueTimeTick: Период регистрации контроллера в формате yyyy-mm-dd hh:nn:ss в виде строки.
+    //@return Список прочитанных значений.
+    //}
+    //function ReadHistoryAddresses(sAddresses: Array Of String; dtTime: TDateTime = 0; iValueTimeCount: Integer = 0; sValueTimeTick: AnsiString = ''): TStringList; virtual;
+    //
     {
     Фунция записи данных
-    @param aAddresses Список строк адресов записываемых значений
-    @param aValues Список записываемых значений
-    @return True - запись прошла успешно / False - ошибка записи
+    @param sAddresses Список адресов для записи
+    @param aValues Список значений для записи
+    @param dtTime: Время актуальности данных.
+                  Если не определено, то берется текущее системное время.
+    @return Результат записи - True - запись прошла успешно False - ошибка
     }
-    function Write(aAddresses: TStringList; aValues: TStringList): Boolean; override;
+    function Write(sAddresses, aValues: TStringList; dtTime: TDateTime = 0): Boolean; override;
+    {
+    Запись значений по адресам
+    @param sAddresses Массив адресов для записи
+    @param aValues Массив значений для записи
+    @param dtTime: Время актуальности данных.
+                  Если не определено, то берется текущее системное время.
+    @return Результат записи - True - запись прошла успешно False - ошибка
+    }
+    function WriteAddresses(sAddresses, aValues: Array Of String; dtTime: TDateTime = 0): Boolean; override;
+    {
+    Запись значения по адресу
+    @param sAddress Значение адреса для записи
+    @param aValue Значение для записи в строковом представлении
+    @param dtTime: Время актуальности данных.
+                  Если не определено, то берется текущее системное время.
+    @return Результат записи - True - запись прошла успешно False - ошибка
+    }
+    function WriteAddress(sAddress, aValue: AnsiString; dtTime: TDateTime = 0): Boolean; override;
+    //{
+    //Запись всех внутренних данных
+    //@param dtTime: Время актуальности данных.
+    //              Если не определено, то берется текущее системное время.
+    //@return Результат записи - True - запись прошла успешно False - ошибка
+    //}
+    //function WriteAll(dtTime: TDateTime = 0): Boolean; virtual;
 
     {
-    Фунция записи данных
-    @param sAddress Адрес записываемаего значения
-    @param sValue Записываемое значение в виде строки
-    @return True - запись прошла успешно / False - ошибка записи
-    }
-    function WriteString(sAddress: AnsiString; sValue: AnsiString): Boolean; override;
-
-    {
-    Фунция записи данных
+    Фунция записи данных как целого числа.
     @param sAddress Адрес записываемаего значения
     @param iValue Записываемое значение в виде целого числа
+    @param dtTime: Время актуальности данных.
+                  Если не определено, то берется текущее системное время.
     @return True - запись прошла успешно / False - ошибка записи
     }
-    function WriteInteger(sAddress: AnsiString; iValue: Integer): Boolean; override;
-
-    {
-    Функция записи данных по адресам
-    @param aAddresses Массив адресов записываемых значений
-    @param aValues Список записываемых значений
-    @param Список результатов записи
-    }
-    function WriteAddresses(aAddresses: Array Of String; aValues: Array Of String): TStringList; override;
+    function WriteAddressAsInteger(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0): Boolean; override;
 
     { Установить свойства в виде списка параметров }
     procedure SetPropertiesArray(aArgs: Array Of Const); override;
@@ -152,7 +219,8 @@ end;
 {
 Фунция чтения данных
 }
-function TICOPCServerNode.Read(aValues: TStringList): TStringList;
+function TICOPCServerNode.Read(sAddresses: TStringList; dtTime: TDateTime = 0): TStringList;
+//function TICOPCServerNode.Read(aValues: TStringList): TStringList;
 var
   i: Integer;
   tags: TStrDictionary;
@@ -202,7 +270,8 @@ begin
   end;
 end;
 
-function TICOPCServerNode.ReadAddresses(aValues: Array Of String): TStringList;
+function TICOPCServerNode.ReadAddresses(sAddresses: Array Of String; dtTime: TDateTime = 0): TStringList;
+//function TICOPCServerNode.ReadAddresses(aValues: Array Of String): TStringList;
 var
   i: Integer;
   log_tags: AnsiString;
@@ -225,13 +294,13 @@ begin
     else
       Properties := TStrDictionary.Create;
 
-    for i := 0 to Length(aValues) - 1 do
+    for i := 0 to Length(sAddresses) - 1 do
     begin
-      log_tags := log_tags + Format('tag%d', [i]) + ' = ' + AnsiString(aValues[i]) + LineEnding;
+      log_tags := log_tags + Format('tag%d', [i]) + ' = ' + AnsiString(sAddresses[i]) + LineEnding;
       // log.DebugMsg(Format('tag%d', [i]) + ' = ' + AnsiString(aValues[i]));
       Properties.AddStrValue(Format('tag%d', [i]),
                              { Преобразование элемента списка параметров в AnsiString:}
-                             AnsiString(aValues[i]));
+                             AnsiString(sAddresses[i]));
     end;
 
     // Сначала адреса указать в свойствах
@@ -276,12 +345,17 @@ end;
 {
 Фунция записи данных
 }
-function TICOPCServerNode.Write(aAddresses: TStringList; aValues: TStringList): Boolean;
+function TICOPCServerNode.Write(sAddresses, aValues: TStringList; dtTime: TDateTime = 0): Boolean;
+//function TICOPCServerNode.Write(aValues: TStringList): Boolean;
 begin
   Result := False;
 end;
 
-function TICOPCServerNode.WriteString(sAddress: AnsiString; sValue: AnsiString): Boolean;
+{
+Функция записи по адресу в виде строки
+}
+function TICOPCServerNode.WriteAddress(sAddress, aValue: AnsiString; dtTime: TDateTime = 0): Boolean;
+//function TICOPCServerNode.WriteString(sAddress: AnsiString; sValue: AnsiString): Boolean;
 var
   i: Integer;
   log_tags: AnsiString;
@@ -304,9 +378,9 @@ begin
     else
       Properties := TStrDictionary.Create;
 
-    log_tags := log_tags + 'tag0' + ' = ' + sValue + LineEnding;
-    log.DebugMsg('tag0 = ' + sValue);
-    Properties.AddStrValue('tag0', sValue);
+    log_tags := log_tags + 'tag0' + ' = ' + aValue + LineEnding;
+    log.DebugMsg('tag0 = ' + aValue);
+    Properties.AddStrValue('tag0', aValue);
 
     // Сначала адреса указать в свойствах
     FOPCClient := TOPCClient.Create(nil);
@@ -327,7 +401,7 @@ begin
     FOPCClient.Connect;
 
     // Запись значения тега
-    FOPCClient.SetTagString(FOPCClient.FindSGroupSTag(group_name, 'tag0'), sValue);
+    FOPCClient.SetTagString(FOPCClient.FindSGroupSTag(group_name, 'tag0'), aValue);
 
     FOPCClient.Disconnect;
     tags.Free;
@@ -341,7 +415,12 @@ begin
   end;
 end;
 
-function TICOPCServerNode.WriteInteger(sAddress: AnsiString; iValue: Integer): Boolean;
+
+{
+Функция записи по адресу в виде целого числа
+}
+function TICOPCServerNode.WriteAddressAsInteger(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0): Boolean;
+//function TICOPCServerNode.WriteInteger(sAddress: AnsiString; iValue: Integer): Boolean;
 var
   i: Integer;
   log_tags: AnsiString;
@@ -366,7 +445,7 @@ begin
 
     log_tags := log_tags + 'tag0' + ' = ' + IntToStr(iValue) + LineEnding;
     log.DebugMsg('tag0 = ' + IntToStr(iValue));
-    Properties.AddIntValue('tag0', iValue);
+    Properties.AddStrValue('tag0', IntToStr(iValue));
 
     // Сначала адреса указать в свойствах
     FOPCClient := TOPCClient.Create(nil);
@@ -401,9 +480,10 @@ begin
   end;
 end;
 
-function TICOPCServerNode.WriteAddresses(aAddresses: Array Of String; aValues: Array Of String): TStringList;
+function TICOPCServerNode.WriteAddresses(sAddresses, aValues: Array Of String; dtTime: TDateTime = 0): Boolean;
+//function TICOPCServerNode.WriteAddresses(aAddresses: Array Of String; aValues: Array Of String): TStringList;
 begin
-  Result := nil;
+  Result := False;
 end;
 
 { Выбрать описания тегов из свойств }

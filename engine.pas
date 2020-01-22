@@ -339,7 +339,7 @@ begin
   ctrl_obj := nil;
   try
     ctrl_obj := CreateRegDataCtrlArgs(self, sDstTypeName, aArgs);
-    Result := ctrl_obj.WriteString(sAddress, sValue);
+    Result := ctrl_obj.WriteAddress(sAddress, sValue);
   except
     log.FatalMsgFmt('Ошибка записи значения <%s> по адресу <%s>', [sValue, sAddress]);
   end;
@@ -358,7 +358,7 @@ begin
   ctrl_obj := nil;
   try
     ctrl_obj := CreateRegDataCtrlArgs(self, sDstTypeName, aArgs);
-    Result := ctrl_obj.WriteInteger(sAddress, iValue);
+    Result := ctrl_obj.WriteAddressAsInteger(sAddress, iValue);
   except
     log.FatalMsgFmt('Ошибка записи значения <%d> по адресу <%s>', [iValue, sAddress]);
   end;
@@ -368,11 +368,12 @@ begin
 end;
 
 
-{ Записать список значений в приемник данных }
+{ Записать список значений в приемнике данных }
 function TICWriter.WriteValuesAsStrings(sDstTypeName: AnsiString; const aArgs: Array Of Const; aAddresses: Array Of String; aValues: Array Of String): TStringList;
 var
   ctrl_obj: TICObjectProto;
   str_list: TStringList;
+  write_result: Boolean;
 
 begin
   Result := nil;
@@ -381,8 +382,9 @@ begin
 
   try
     ctrl_obj := CreateRegDataCtrlArgs(self, sDstTypeName, aArgs);
-    str_list := ctrl_obj.WriteAddresses(aAddresses, aValues);
-    Result := str_list;
+    write_result := ctrl_obj.WriteAddresses(aAddresses, aValues);
+    if write_result then
+      Result := ctrl_obj.GetWriteValues();
   except
     log.FatalMsg('Ошибка записи значений по адресам:');
   end;
