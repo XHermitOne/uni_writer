@@ -167,14 +167,24 @@ type
     function WriteAll(dtTime: TDateTime = 0): Boolean; virtual;
 
     {
-    Фунция записи данных как целого числа.
+    Фунция записи данных как целого числа (2 байта).
     @param sAddress Адрес записываемаего значения
     @param iValue Записываемое значение в виде целого числа
     @param dtTime: Время актуальности данных.
                   Если не определено, то берется текущее системное время.
     @return True - запись прошла успешно / False - ошибка записи
     }
-    function WriteAddressAsInteger(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0): Boolean; virtual;
+    function WriteAddressAsInt2(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0): Boolean; virtual;
+
+    {
+    Фунция записи данных как целого числа (4 байта).
+    @param sAddress Адрес записываемаего значения
+    @param iValue Записываемое значение в виде целого числа
+    @param dtTime: Время актуальности данных.
+                  Если не определено, то берется текущее системное время.
+    @return True - запись прошла успешно / False - ошибка записи
+    }
+    function WriteAddressAsInt4(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0): Boolean; virtual;
 
     {
     Фунция записи данных как логического значения.
@@ -473,16 +483,30 @@ begin
 end;
 
 {
-Фунция записи данных как целого числа.
+Фунция записи данных как целого числа (2 байта).
 @param sAddress Адрес записываемаего значения
 @param iValue Записываемое значение в виде целого числа
 @param dtTime: Время актуальности данных.
               Если не определено, то берется текущее системное время.
 @return True - запись прошла успешно / False - ошибка записи
 }
-function TICObjectProto.WriteAddressAsInteger(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0): Boolean;
+function TICObjectProto.WriteAddressAsInt2(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0): Boolean;
 begin
-  log.WarningMsgFmt('Вызов не определенного метода WriteAddressAsInteger объекта <%s>', [FName]);
+  log.WarningMsgFmt('Вызов не определенного метода WriteAddressAsInt2 объекта <%s>', [FName]);
+  Result := False;
+end;
+
+{
+Фунция записи данных как целого числа (4 байта).
+@param sAddress Адрес записываемаего значения
+@param iValue Записываемое значение в виде целого числа
+@param dtTime: Время актуальности данных.
+              Если не определено, то берется текущее системное время.
+@return True - запись прошла успешно / False - ошибка записи
+}
+function TICObjectProto.WriteAddressAsInt4(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0): Boolean;
+begin
+  log.WarningMsgFmt('Вызов не определенного метода WriteAddressAsInt4 объекта <%s>', [FName]);
   Result := False;
 end;
 

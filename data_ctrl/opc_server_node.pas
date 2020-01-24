@@ -155,14 +155,26 @@ type
     //function WriteAll(dtTime: TDateTime = 0): Boolean; virtual;
 
     {
-    Фунция записи данных как целого числа.
+    Фунция записи данных как целого числа (2 байта).
     @param sAddress Адрес записываемаего значения
     @param iValue Записываемое значение в виде целого числа
     @param dtTime: Время актуальности данных.
                   Если не определено, то берется текущее системное время.
     @return True - запись прошла успешно / False - ошибка записи
     }
-    function WriteAddressAsInteger(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0): Boolean; override;
+    function WriteAddressAsInt2(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0): Boolean; override;
+
+    {
+    Фунция записи данных как целого числа (4 байта).
+    @param sAddress Адрес записываемаего значения
+    @param iValue Записываемое значение в виде целого числа
+    @param dtTime: Время актуальности данных.
+                  Если не определено, то берется текущее системное время.
+    @return True - запись прошла успешно / False - ошибка записи
+    }
+    function WriteAddressAsInt4(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0): Boolean; override;
+
+    function WriteAddressAsInteger(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0; const aTyp: TVarType = VT_I2): Boolean;
 
     {
     Фунция записи данных как логического значения.
@@ -433,9 +445,22 @@ end;
 
 
 {
-Функция записи по адресу в виде целого числа
+Функция записи по адресу в виде целого числа (2 байта)
 }
-function TICOPCServerNode.WriteAddressAsInteger(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0): Boolean;
+function TICOPCServerNode.WriteAddressAsInt2(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0): Boolean;
+begin
+  Result := WriteAddressAsInteger(sAddress, iValue, dtTime, VT_I2);
+end;
+
+{
+Функция записи по адресу в виде целого числа (4 байта)
+}
+function TICOPCServerNode.WriteAddressAsInt4(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0): Boolean;
+begin
+  Result := WriteAddressAsInteger(sAddress, iValue, dtTime, VT_I4);
+end;
+
+function TICOPCServerNode.WriteAddressAsInteger(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0;  const aTyp: TVarType = VT_I2): Boolean;
 var
   i: Integer;
   log_tags: AnsiString;
@@ -473,7 +498,7 @@ begin
     begin
       tag_name := tags.GetKey(i);
       log.DebugMsgFmt('Добавление тега <%s>. Адрес <%s>', [tag_name, sAddress]);
-      tag_item := TTagItem.Create(tag_name, sAddress, VT_I2, acWrite);
+      tag_item := TTagItem.Create(tag_name, sAddress, aTyp, acWrite);
       grp.AddTag(tag_item);
     end;
     FOPCClient.TagList.AddGroup(grp);
@@ -481,7 +506,10 @@ begin
     FOPCClient.Connect;
 
     // Запись значения тега
-    FOPCClient.SetTagSmallInt(FOPCClient.FindSGroupSTag(group_name, 'tag0'), iValue);
+    if aTyp = VT_I2 then
+        FOPCClient.SetTagSmallInt(FOPCClient.FindSGroupSTag(group_name, 'tag0'), iValue)
+    else
+        log.WarningMsgFmt('Не поддерживаемый тип целого числа <%d>', [aTyp]);
 
     FOPCClient.Disconnect;
     tags.Free;

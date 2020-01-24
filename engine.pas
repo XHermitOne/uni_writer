@@ -99,14 +99,24 @@ type
       function WriteValueAsString(sDstTypeName: AnsiString; const aArgs: Array Of Const; sAddress: AnsiString; sValue: AnsiString): Boolean;
 
       {
-      Записать значение в приемник данных как целого числа
+      Записать значение в приемник данных как целого числа (2 байта)
       @param sDstTypeName Наименование типа приемника
       @param aArgs Массив дополнительных аргументов
       @param sAddress Адрес значения в приемнике данных в строковом виде
       @param iValue Записываемое значение в виде целого числа
       @return True/False
       }
-      function WriteValueAsInteger(sDstTypeName: AnsiString; const aArgs: Array Of Const; sAddress: AnsiString; iValue: Integer): Boolean;
+      function WriteValueAsInt2(sDstTypeName: AnsiString; const aArgs: Array Of Const; sAddress: AnsiString; iValue: Integer): Boolean;
+
+      {
+      Записать значение в приемник данных как целого числа (4 байта)
+      @param sDstTypeName Наименование типа приемника
+      @param aArgs Массив дополнительных аргументов
+      @param sAddress Адрес значения в приемнике данных в строковом виде
+      @param iValue Записываемое значение в виде целого числа
+      @return True/False
+      }
+      function WriteValueAsInt4(sDstTypeName: AnsiString; const aArgs: Array Of Const; sAddress: AnsiString; iValue: Integer): Boolean;
 
       {
       Записать значение в приемник данных как логического значения
@@ -152,8 +162,11 @@ type
       procedure WriteValueAsStringRpcMethod(Thread: TRpcThread; const sMethodName: string;
                                             List: TList; Return: TRpcReturn);
 
-      procedure WriteValueAsIntegerRpcMethod(Thread: TRpcThread; const sMethodName: string;
-                                             List: TList; Return: TRpcReturn);
+      procedure WriteValueAsInt2RpcMethod(Thread: TRpcThread; const sMethodName: string;
+                                          List: TList; Return: TRpcReturn);
+
+      procedure WriteValueAsInt4RpcMethod(Thread: TRpcThread; const sMethodName: string;
+                                          List: TList; Return: TRpcReturn);
 
       procedure WriteValueAsBooleanRpcMethod(Thread: TRpcThread; const sMethodName: string;
                                              List: TList; Return: TRpcReturn);
@@ -376,8 +389,8 @@ begin
     ctrl_obj.Free;
 end;
 
-{ Записать значение в приемник данных }
-function TICWriter.WriteValueAsInteger(sDstTypeName: AnsiString; const aArgs: Array Of Const; sAddress: AnsiString; iValue: Integer): Boolean;
+{ Записать целое значение (2 байта) в приемник данных }
+function TICWriter.WriteValueAsInt2(sDstTypeName: AnsiString; const aArgs: Array Of Const; sAddress: AnsiString; iValue: Integer): Boolean;
 var
   ctrl_obj: TICObjectProto;
 
@@ -386,7 +399,26 @@ begin
   ctrl_obj := nil;
   try
     ctrl_obj := CreateRegDataCtrlArgs(self, sDstTypeName, aArgs);
-    Result := ctrl_obj.WriteAddressAsInteger(sAddress, iValue);
+    Result := ctrl_obj.WriteAddressAsInt2(sAddress, iValue);
+  except
+    log.FatalMsgFmt('Ошибка записи значения <%d> по адресу <%s>', [iValue, sAddress]);
+  end;
+
+  if ctrl_obj <> nil then
+    ctrl_obj.Free;
+end;
+
+{ Записать целое значение (4 байта) в приемник данных }
+function TICWriter.WriteValueAsInt4(sDstTypeName: AnsiString; const aArgs: Array Of Const; sAddress: AnsiString; iValue: Integer): Boolean;
+var
+  ctrl_obj: TICObjectProto;
+
+begin
+  Result := False;
+  ctrl_obj := nil;
+  try
+    ctrl_obj := CreateRegDataCtrlArgs(self, sDstTypeName, aArgs);
+    Result := ctrl_obj.WriteAddressAsInt4(sAddress, iValue);
   except
     log.FatalMsgFmt('Ошибка записи значения <%d> по адресу <%s>', [iValue, sAddress]);
   end;
@@ -496,8 +528,17 @@ begin
 
       // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
       MethodHandler := TRpcMethodHandler.Create;
-      MethodHandler.Name := 'destinations.WriteValueAsInteger';
-      MethodHandler.Method := @WriteValueAsIntegerRpcMethod;
+      MethodHandler.Name := 'destinations.WriteValueAsInt2';
+      MethodHandler.Method := @WriteValueAsInt2RpcMethod;
+      MethodHandler.Signature := 'string (string myval)';
+      MethodHandler.Help := 'Write value as integer to data destination';
+      FRpcServer.RegisterMethodHandler(MethodHandler);
+      // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+      MethodHandler := TRpcMethodHandler.Create;
+      MethodHandler.Name := 'destinations.WriteValueAsInt4';
+      MethodHandler.Method := @WriteValueAsInt4RpcMethod;
       MethodHandler.Signature := 'string (string myval)';
       MethodHandler.Help := 'Write value as integer to data destination';
       FRpcServer.RegisterMethodHandler(MethodHandler);
@@ -586,8 +627,8 @@ begin
   Return.AddItem(opc_result);
 end;
 
-procedure TICWriter.WriteValueAsIntegerRpcMethod(Thread: TRpcThread; const sMethodName: string;
-                                                 List: TList; Return: TRpcReturn);
+procedure TICWriter.WriteValueAsInt2RpcMethod(Thread: TRpcThread; const sMethodName: string;
+                                              List: TList; Return: TRpcReturn);
 var
   dst_type_name: AnsiString;
   opc_server_name: AnsiString;
@@ -601,11 +642,33 @@ begin
   address := TRpcParameter(List[2]).AsString;
   value := TRpcParameter(List[3]).AsInteger;
 
-  opc_result := WriteValueAsInteger(dst_type_name, [opc_server_name], address, value);
+  opc_result := WriteValueAsInt2(dst_type_name, [opc_server_name], address, value);
 
   {return a message showing what was sent}
   Return.AddItem(opc_result);
 end;
+
+procedure TICWriter.WriteValueAsInt4RpcMethod(Thread: TRpcThread; const sMethodName: string;
+                                              List: TList; Return: TRpcReturn);
+var
+  dst_type_name: AnsiString;
+  opc_server_name: AnsiString;
+  address: AnsiString;
+  opc_result: Boolean;
+  value: Integer;
+
+begin
+  dst_type_name := TRpcParameter(List[0]).AsString;
+  opc_server_name := TRpcParameter(List[1]).AsString;
+  address := TRpcParameter(List[2]).AsString;
+  value := TRpcParameter(List[3]).AsInteger;
+
+  opc_result := WriteValueAsInt4(dst_type_name, [opc_server_name], address, value);
+
+  {return a message showing what was sent}
+  Return.AddItem(opc_result);
+end;
+
 
 procedure TICWriter.WriteValueAsBooleanRpcMethod(Thread: TRpcThread; const sMethodName: string;
                                                  List: TList; Return: TRpcReturn);
