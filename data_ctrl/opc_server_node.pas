@@ -481,7 +481,7 @@ begin
     FOPCClient.Connect;
 
     // Запись значения тега
-    FOPCClient.SetTagLongint(FOPCClient.FindSGroupSTag(group_name, 'tag0'), iValue);
+    FOPCClient.SetTagSmallInt(FOPCClient.FindSGroupSTag(group_name, 'tag0'), iValue);
 
     FOPCClient.Disconnect;
     tags.Free;
