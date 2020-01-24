@@ -8,7 +8,7 @@
       <Unit0>
         <Filename Value="uni_writer.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="8"/>
         <TopLine Value="91"/>
         <CursorPos X="10" Y="98"/>
         <UsageCount Value="43"/>
@@ -30,9 +30,12 @@
         <ComponentName Value="UniWriterDaemon"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos Y="61"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="56"/>
+        <CursorPos Y="70"/>
         <UsageCount Value="43"/>
+        <Loaded Value="True"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils\log.pas"/>
@@ -52,7 +55,6 @@
       <Unit5>
         <Filename Value="engine.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
         <TopLine Value="628"/>
         <CursorPos X="33" Y="645"/>
@@ -142,7 +144,7 @@
       <Unit15>
         <Filename Value="data_ctrl\opc_server_node.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="440"/>
         <CursorPos X="5" Y="461"/>
         <UsageCount Value="43"/>
@@ -166,7 +168,7 @@
       <Unit18>
         <Filename Value="opc_client\opc_client.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <TopLine Value="147"/>
         <CursorPos X="15" Y="165"/>
         <UsageCount Value="43"/>
@@ -229,7 +231,7 @@
       <Unit25>
         <Filename Value="opc_client\tag_list.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <TopLine Value="46"/>
         <CursorPos X="27" Y="60"/>
         <UsageCount Value="43"/>

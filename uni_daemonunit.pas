@@ -67,7 +67,8 @@ procedure TUniWriterDaemon.DataModuleStop(Sender: TCustomDaemon; var OK: Boolean
   );
 begin
   engine.WRITER_ENGINE.StopServer;
-  engine.WRITER_ENGINE.Free;
+  //engine.WRITER_ENGINE.Free;
+  engine.WRITER_ENGINE.Destroy;
   engine.WRITER_ENGINE := nil;
 end;
 
