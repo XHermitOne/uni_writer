@@ -473,7 +473,7 @@ begin
     begin
       tag_name := tags.GetKey(i);
       log.DebugMsgFmt('Добавление тега <%s>. Адрес <%s>', [tag_name, sAddress]);
-      tag_item := TTagItem.Create(tag_name, sAddress, VT_DECIMAL, acWrite);
+      tag_item := TTagItem.Create(tag_name, sAddress, VT_I2, acWrite);
       grp.AddTag(tag_item);
     end;
     FOPCClient.TagList.AddGroup(grp);
