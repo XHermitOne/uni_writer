@@ -119,6 +119,16 @@ type
       function WriteValueAsBoolean(sDstTypeName: AnsiString; const aArgs: Array Of Const; sAddress: AnsiString; bValue: Boolean): Boolean;
 
       {
+      Записать значение в приемник данных как вещественного значения
+      @param sDstTypeName Наименование типа приемника
+      @param aArgs Массив дополнительных аргументов
+      @param sAddress Адрес значения в приемнике данных в строковом виде
+      @param fValue Записываемое значение в виде вещественного значения
+      @return True/False
+      }
+      function WriteValueAsFloat(sDstTypeName: AnsiString; const aArgs: Array Of Const; sAddress: AnsiString; fValue: Double): Boolean;
+
+      {
       Записать список значений в приемник данных
       @param sDstTypeName Наименование типа приемника
       @param aArgs Массив дополнительных аргументов
@@ -146,6 +156,9 @@ type
                                              List: TList; Return: TRpcReturn);
 
       procedure WriteValueAsBooleanRpcMethod(Thread: TRpcThread; const sMethodName: string;
+                                             List: TList; Return: TRpcReturn);
+
+      procedure WriteValueAsFloatRpcMethod(Thread: TRpcThread; const sMethodName: string;
                                              List: TList; Return: TRpcReturn);
 
       { Функция записи данных в приемник удаленного вызова процедур }
@@ -402,6 +415,25 @@ begin
     ctrl_obj.Free;
 end;
 
+{ Записать значение в приемник данных }
+function TICWriter.WriteValueAsFloat(sDstTypeName: AnsiString; const aArgs: Array Of Const; sAddress: AnsiString; fValue: Double): Boolean;
+var
+  ctrl_obj: TICObjectProto;
+
+begin
+  Result := False;
+  ctrl_obj := nil;
+  try
+    ctrl_obj := CreateRegDataCtrlArgs(self, sDstTypeName, aArgs);
+    Result := ctrl_obj.WriteAddressAsFloat(sAddress, fValue);
+  except
+    log.FatalMsgFmt('Ошибка записи значения <%f> по адресу <%s>', [fValue, sAddress]);
+  end;
+
+  if ctrl_obj <> nil then
+    ctrl_obj.Free;
+end;
+
 { Записать список значений в приемнике данных }
 function TICWriter.WriteValuesAsStrings(sDstTypeName: AnsiString; const aArgs: Array Of Const; aAddresses: Array Of String; aValues: Array Of String): TStringList;
 var
@@ -477,6 +509,15 @@ begin
       MethodHandler.Method := @WriteValueAsBooleanRpcMethod;
       MethodHandler.Signature := 'string (string myval)';
       MethodHandler.Help := 'Write value as boolean to data destination';
+      FRpcServer.RegisterMethodHandler(MethodHandler);
+      // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+      MethodHandler := TRpcMethodHandler.Create;
+      MethodHandler.Name := 'destinations.WriteValueAsFloat';
+      MethodHandler.Method := @WriteValueAsFloatRpcMethod;
+      MethodHandler.Signature := 'string (string myval)';
+      MethodHandler.Help := 'Write value as double to data destination';
       FRpcServer.RegisterMethodHandler(MethodHandler);
       // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -582,6 +623,27 @@ begin
   value := TRpcParameter(List[3]).AsBoolean;
 
   opc_result := WriteValueAsBoolean(dst_type_name, [opc_server_name], address, value);
+
+  {return a message showing what was sent}
+  Return.AddItem(opc_result);
+end;
+
+procedure TICWriter.WriteValueAsFloatRpcMethod(Thread: TRpcThread; const sMethodName: string;
+                                               List: TList; Return: TRpcReturn);
+var
+  dst_type_name: AnsiString;
+  opc_server_name: AnsiString;
+  address: AnsiString;
+  opc_result: Boolean;
+  value: Double;
+
+begin
+  dst_type_name := TRpcParameter(List[0]).AsString;
+  opc_server_name := TRpcParameter(List[1]).AsString;
+  address := TRpcParameter(List[2]).AsString;
+  value := TRpcParameter(List[3]).AsFloat;
+
+  opc_result := WriteValueAsFloat(dst_type_name, [opc_server_name], address, value);
 
   {return a message showing what was sent}
   Return.AddItem(opc_result);

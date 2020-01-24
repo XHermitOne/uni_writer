@@ -174,6 +174,16 @@ type
     }
     function WriteAddressAsBoolean(sAddress: AnsiString; bValue: Boolean; dtTime: TDateTime = 0): Boolean; override;
 
+    {
+    Фунция записи данных как вещественного значения.
+    @param sAddress Адрес записываемаего значения
+    @param fValue Записываемое значение в виде вещественного значения
+    @param dtTime: Время актуальности данных.
+                  Если не определено, то берется текущее системное время.
+    @return True - запись прошла успешно / False - ошибка записи
+    }
+    function WriteAddressAsFloat(sAddress: AnsiString; fValue: Double; dtTime: TDateTime = 0): Boolean; override;
+
     { Установить свойства в виде списка параметров }
     procedure SetPropertiesArray(aArgs: Array Of Const); override;
 
@@ -463,7 +473,7 @@ begin
     begin
       tag_name := tags.GetKey(i);
       log.DebugMsgFmt('Добавление тега <%s>. Адрес <%s>', [tag_name, sAddress]);
-      tag_item := TTagItem.Create(tag_name, sAddress, VT_I4, acWrite);
+      tag_item := TTagItem.Create(tag_name, sAddress, VT_DECIMAL, acWrite);
       grp.AddTag(tag_item);
     end;
     FOPCClient.TagList.AddGroup(grp);
@@ -535,6 +545,69 @@ begin
 
     // Запись значения тега
     FOPCClient.SetTagBoolean(FOPCClient.FindSGroupSTag(group_name, 'tag0'), bValue);
+
+    FOPCClient.Disconnect;
+    tags.Free;
+
+    Result := True;
+  except
+    FOPCClient.Disconnect;
+    tags.Free;
+
+    log.FatalMsgFmt('Write addresses value in <%s> %s', [ClassName, log_tags]);
+  end;
+end;
+
+{
+Функция записи по адресу в виде вещественного значения
+}
+function TICOPCServerNode.WriteAddressAsFloat(sAddress: AnsiString; fValue: Double; dtTime: TDateTime = 0): Boolean;
+var
+  i: Integer;
+  log_tags: AnsiString;
+  group_name: AnsiString;
+  tags: TStrDictionary;
+  grp: TGroup;
+  tag_item: TTagItem;
+  tag_name: AnsiString;
+
+begin
+  Result := False;
+
+  group_name := UNKNOWN_GROUP_NAME;
+  //
+  log_tags := LineEnding;
+  try
+    // Сначала добавить адреса в свойства
+    if Properties <> nil then
+      Properties.Clear
+    else
+      Properties := TStrDictionary.Create;
+
+    log_tags := log_tags + 'tag0' + ' = ' + FloatToStr(fValue) + LineEnding;
+    log.DebugMsg('tag0 = ' + FloatToStr(fValue));
+    Properties.AddStrValue('tag0', FloatToStr(fValue));
+
+    // Сначала адреса указать в свойствах
+    FOPCClient := TOPCClient.Create(nil);
+    FOPCClient.ServerName := FOPCServerName;
+
+    tags := CreateTags;
+
+    grp := TGroup.Create(group_name, 500, 0);
+    for i := 0 to tags.Count - 1 do
+    begin
+      tag_name := tags.GetKey(i);
+      log.DebugMsgFmt('Добавление тега <%s>. Адрес <%s>', [tag_name, sAddress]);
+      tag_item := TTagItem.Create(tag_name, sAddress, VT_R8, acWrite);
+      grp.AddTag(tag_item);
+    end;
+    FOPCClient.TagList.AddGroup(grp);
+
+    FOPCClient.Connect;
+
+    // Запись значения тега
+    FOPCClient.SetTagDouble(FOPCClient.FindSGroupSTag(group_name, 'tag0'), fValue);
 
     FOPCClient.Disconnect;
     tags.Free;
