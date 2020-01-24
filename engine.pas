@@ -1,5 +1,7 @@
 {
 Модуль классов движка
+
+Версия: 0.0.3.1
 }
 
 unit engine;
@@ -101,10 +103,20 @@ type
       @param sDstTypeName Наименование типа приемника
       @param aArgs Массив дополнительных аргументов
       @param sAddress Адрес значения в приемнике данных в строковом виде
-      @param sValue Записываемое значение в виде целого числа
+      @param iValue Записываемое значение в виде целого числа
       @return True/False
       }
       function WriteValueAsInteger(sDstTypeName: AnsiString; const aArgs: Array Of Const; sAddress: AnsiString; iValue: Integer): Boolean;
+
+      {
+      Записать значение в приемник данных как логического значения
+      @param sDstTypeName Наименование типа приемника
+      @param aArgs Массив дополнительных аргументов
+      @param sAddress Адрес значения в приемнике данных в строковом виде
+      @param bValue Записываемое значение в виде логического значения
+      @return True/False
+      }
+      function WriteValueAsBoolean(sDstTypeName: AnsiString; const aArgs: Array Of Const; sAddress: AnsiString; bValue: Boolean): Boolean;
 
       {
       Записать список значений в приемник данных
@@ -131,6 +143,9 @@ type
                                             List: TList; Return: TRpcReturn);
 
       procedure WriteValueAsIntegerRpcMethod(Thread: TRpcThread; const sMethodName: string;
+                                             List: TList; Return: TRpcReturn);
+
+      procedure WriteValueAsBooleanRpcMethod(Thread: TRpcThread; const sMethodName: string;
                                              List: TList; Return: TRpcReturn);
 
       { Функция записи данных в приемник удаленного вызова процедур }
@@ -368,6 +383,25 @@ begin
 end;
 
 
+{ Записать значение в приемник данных }
+function TICWriter.WriteValueAsBoolean(sDstTypeName: AnsiString; const aArgs: Array Of Const; sAddress: AnsiString; bValue: Boolean): Boolean;
+var
+  ctrl_obj: TICObjectProto;
+
+begin
+  Result := False;
+  ctrl_obj := nil;
+  try
+    ctrl_obj := CreateRegDataCtrlArgs(self, sDstTypeName, aArgs);
+    Result := ctrl_obj.WriteAddressAsBoolean(sAddress, bValue);
+  except
+    log.FatalMsgFmt('Ошибка записи значения <%d> по адресу <%s>', [bValue, sAddress]);
+  end;
+
+  if ctrl_obj <> nil then
+    ctrl_obj.Free;
+end;
+
 { Записать список значений в приемнике данных }
 function TICWriter.WriteValuesAsStrings(sDstTypeName: AnsiString; const aArgs: Array Of Const; aAddresses: Array Of String; aValues: Array Of String): TStringList;
 var
@@ -434,6 +468,15 @@ begin
       MethodHandler.Method := @WriteValueAsIntegerRpcMethod;
       MethodHandler.Signature := 'string (string myval)';
       MethodHandler.Help := 'Write value as integer to data destination';
+      FRpcServer.RegisterMethodHandler(MethodHandler);
+      // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+      MethodHandler := TRpcMethodHandler.Create;
+      MethodHandler.Name := 'destinations.WriteValueAsBoolean';
+      MethodHandler.Method := @WriteValueAsBooleanRpcMethod;
+      MethodHandler.Signature := 'string (string myval)';
+      MethodHandler.Help := 'Write value as boolean to data destination';
       FRpcServer.RegisterMethodHandler(MethodHandler);
       // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -518,6 +561,27 @@ begin
   value := TRpcParameter(List[3]).AsInteger;
 
   opc_result := WriteValueAsInteger(dst_type_name, [opc_server_name], address, value);
+
+  {return a message showing what was sent}
+  Return.AddItem(opc_result);
+end;
+
+procedure TICWriter.WriteValueAsBooleanRpcMethod(Thread: TRpcThread; const sMethodName: string;
+                                                 List: TList; Return: TRpcReturn);
+var
+  dst_type_name: AnsiString;
+  opc_server_name: AnsiString;
+  address: AnsiString;
+  opc_result: Boolean;
+  value: Boolean;
+
+begin
+  dst_type_name := TRpcParameter(List[0]).AsString;
+  opc_server_name := TRpcParameter(List[1]).AsString;
+  address := TRpcParameter(List[2]).AsString;
+  value := TRpcParameter(List[3]).AsBoolean;
+
+  opc_result := WriteValueAsBoolean(dst_type_name, [opc_server_name], address, value);
 
   {return a message showing what was sent}
   Return.AddItem(opc_result);

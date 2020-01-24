@@ -10,7 +10,7 @@
 Выставить галки <Удаленный доступ>, <Удаленный запуск>, <Локальная активация>, <Удаленная активация> ->
 OK
 
-Версия: 0.0.2.1
+Версия: 0.0.3.1
 }
 
 unit opc_server_node;
@@ -164,6 +164,16 @@ type
     }
     function WriteAddressAsInteger(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0): Boolean; override;
 
+    {
+    Фунция записи данных как логического значения.
+    @param sAddress Адрес записываемаего значения
+    @param bValue Записываемое значение в виде логического значения
+    @param dtTime: Время актуальности данных.
+                  Если не определено, то берется текущее системное время.
+    @return True - запись прошла успешно / False - ошибка записи
+    }
+    function WriteAddressAsBoolean(sAddress: AnsiString; bValue: Boolean; dtTime: TDateTime = 0): Boolean; override;
+
     { Установить свойства в виде списка параметров }
     procedure SetPropertiesArray(aArgs: Array Of Const); override;
 
@@ -220,7 +230,6 @@ end;
 Фунция чтения данных
 }
 function TICOPCServerNode.Read(sAddresses: TStringList; dtTime: TDateTime = 0): TStringList;
-//function TICOPCServerNode.Read(aValues: TStringList): TStringList;
 var
   i: Integer;
   tags: TStrDictionary;
@@ -271,7 +280,6 @@ begin
 end;
 
 function TICOPCServerNode.ReadAddresses(sAddresses: Array Of String; dtTime: TDateTime = 0): TStringList;
-//function TICOPCServerNode.ReadAddresses(aValues: Array Of String): TStringList;
 var
   i: Integer;
   log_tags: AnsiString;
@@ -346,7 +354,6 @@ end;
 Фунция записи данных
 }
 function TICOPCServerNode.Write(sAddresses, aValues: TStringList; dtTime: TDateTime = 0): Boolean;
-//function TICOPCServerNode.Write(aValues: TStringList): Boolean;
 begin
   Result := False;
 end;
@@ -355,7 +362,6 @@ end;
 Функция записи по адресу в виде строки
 }
 function TICOPCServerNode.WriteAddress(sAddress, aValue: AnsiString; dtTime: TDateTime = 0): Boolean;
-//function TICOPCServerNode.WriteString(sAddress: AnsiString; sValue: AnsiString): Boolean;
 var
   i: Integer;
   log_tags: AnsiString;
@@ -420,7 +426,6 @@ end;
 Функция записи по адресу в виде целого числа
 }
 function TICOPCServerNode.WriteAddressAsInteger(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0): Boolean;
-//function TICOPCServerNode.WriteInteger(sAddress: AnsiString; iValue: Integer): Boolean;
 var
   i: Integer;
   log_tags: AnsiString;
@@ -467,6 +472,69 @@ begin
 
     // Запись значения тега
     FOPCClient.SetTagLongint(FOPCClient.FindSGroupSTag(group_name, 'tag0'), iValue);
+
+    FOPCClient.Disconnect;
+    tags.Free;
+
+    Result := True;
+  except
+    FOPCClient.Disconnect;
+    tags.Free;
+
+    log.FatalMsgFmt('Write addresses value in <%s> %s', [ClassName, log_tags]);
+  end;
+end;
+
+{
+Функция записи по адресу в виде логического значения
+}
+function TICOPCServerNode.WriteAddressAsBoolean(sAddress: AnsiString; bValue: Boolean; dtTime: TDateTime = 0): Boolean;
+var
+  i: Integer;
+  log_tags: AnsiString;
+  group_name: AnsiString;
+  tags: TStrDictionary;
+  grp: TGroup;
+  tag_item: TTagItem;
+  tag_name: AnsiString;
+
+begin
+  Result := False;
+
+  group_name := UNKNOWN_GROUP_NAME;
+  //
+  log_tags := LineEnding;
+  try
+    // Сначала добавить адреса в свойства
+    if Properties <> nil then
+      Properties.Clear
+    else
+      Properties := TStrDictionary.Create;
+
+    log_tags := log_tags + 'tag0' + ' = ' + BoolToStr(bValue) + LineEnding;
+    log.DebugMsg('tag0 = ' + BoolToStr(bValue));
+    Properties.AddStrValue('tag0', BoolToStr(bValue));
+
+    // Сначала адреса указать в свойствах
+    FOPCClient := TOPCClient.Create(nil);
+    FOPCClient.ServerName := FOPCServerName;
+
+    tags := CreateTags;
+
+    grp := TGroup.Create(group_name, 500, 0);
+    for i := 0 to tags.Count - 1 do
+    begin
+      tag_name := tags.GetKey(i);
+      log.DebugMsgFmt('Добавление тега <%s>. Адрес <%s>', [tag_name, sAddress]);
+      tag_item := TTagItem.Create(tag_name, sAddress, VT_BOOL, acWrite);
+      grp.AddTag(tag_item);
+    end;
+    FOPCClient.TagList.AddGroup(grp);
+
+    FOPCClient.Connect;
+
+    // Запись значения тега
+    FOPCClient.SetTagBoolean(FOPCClient.FindSGroupSTag(group_name, 'tag0'), bValue);
 
     FOPCClient.Disconnect;
     tags.Free;

@@ -176,6 +176,16 @@ type
     }
     function WriteAddressAsInteger(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0): Boolean; virtual;
 
+    {
+    Фунция записи данных как логического значения.
+    @param sAddress Адрес записываемаего значения
+    @param bValue Записываемое значение в виде логического
+    @param dtTime: Время актуальности данных.
+                  Если не определено, то берется текущее системное время.
+    @return True - запись прошла успешно / False - ошибка записи
+    }
+    function WriteAddressAsBoolean(sAddress: AnsiString; bValue: Boolean; dtTime: TDateTime = 0): Boolean; virtual;
+
     { Зарегистрировать значения переменных в словаре внутренного состояния }
     function RegState(aValues: TStrDictionary): Boolean;
     { Получить имена записываемых значений в контроллер данных }
@@ -463,6 +473,20 @@ end;
 function TICObjectProto.WriteAddressAsInteger(sAddress: AnsiString; iValue: Integer; dtTime: TDateTime = 0): Boolean;
 begin
   log.WarningMsgFmt('Вызов не определенного метода WriteAddressAsInteger объекта <%s>', [FName]);
+  Result := False;
+end;
+
+{
+Фунция записи данных как логического значения.
+@param sAddress Адрес записываемаего значения
+@param bValue Записываемое значение в виде логического
+@param dtTime: Время актуальности данных.
+              Если не определено, то берется текущее системное время.
+@return True - запись прошла успешно / False - ошибка записи
+}
+function TICObjectProto.WriteAddressAsBoolean(sAddress: AnsiString; bValue: Boolean; dtTime: TDateTime = 0): Boolean;
+begin
+  log.WarningMsgFmt('Вызов не определенного метода WriteAddressAsBoolean объекта <%s>', [FName]);
   Result := False;
 end;
 
