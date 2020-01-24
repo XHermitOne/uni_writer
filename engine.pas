@@ -190,7 +190,7 @@ var
   Переменные определенные в секции implementation являются статическими для
   модуля.
   }
-  WRITER_ENGINE: TICWriter;
+  WRITER_ENGINE: TICWriter = nil;
 
 
 implementation

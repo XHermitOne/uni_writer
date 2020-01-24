@@ -58,18 +58,24 @@ end;
 procedure TUniWriterDaemon.DataModuleStart(Sender: TCustomDaemon;
   var OK: Boolean);
 begin
-  engine.WRITER_ENGINE := TICWriter.Create(nil);
-  //engine.WRITER_ENGINE.RegRpcMethods;
-  engine.WRITER_ENGINE.StartServer;
+  if engine.WRITER_ENGINE = nil then
+  begin
+    engine.WRITER_ENGINE := TICWriter.Create(nil);
+    //engine.WRITER_ENGINE.RegRpcMethods;
+    engine.WRITER_ENGINE.StartServer;
+  end;
 end;
 
 procedure TUniWriterDaemon.DataModuleStop(Sender: TCustomDaemon; var OK: Boolean
   );
 begin
-  engine.WRITER_ENGINE.StopServer;
-  //engine.WRITER_ENGINE.Free;
-  engine.WRITER_ENGINE.Destroy;
-  engine.WRITER_ENGINE := nil;
+  if engine.WRITER_ENGINE <> nil then
+  begin
+    engine.WRITER_ENGINE.StopServer;
+    engine.WRITER_ENGINE.Free;
+    //engine.WRITER_ENGINE.Destroy;
+    engine.WRITER_ENGINE := nil;
+  end;
 end;
 
 
