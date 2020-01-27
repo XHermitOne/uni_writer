@@ -357,11 +357,11 @@ begin
     end;
     FOPCClient.Disconnect;
 
-    tags.Free;
+    tags.Destroy;
 
   except
     FOPCClient.Disconnect;
-    tags.Free;
+    tags.Destroy;
 
     if Result <> nil then
     begin
@@ -432,12 +432,12 @@ begin
     FOPCClient.SetTagString(FOPCClient.FindSGroupSTag(group_name, 'tag0'), aValue);
 
     FOPCClient.Disconnect;
-    tags.Free;
+    tags.Destroy;
 
     Result := True;
   except
     FOPCClient.Disconnect;
-    tags.Free;
+    tags.Destroy;
 
     log.FatalMsgFmt('Write addresses value in <%s> %s', [ClassName, log_tags]);
   end;
@@ -512,12 +512,12 @@ begin
         log.WarningMsgFmt('Не поддерживаемый тип целого числа <%d>', [aTyp]);
 
     FOPCClient.Disconnect;
-    tags.Free;
+    tags.Destroy;
 
     Result := True;
   except
     FOPCClient.Disconnect;
-    tags.Free;
+    tags.Destroy;
 
     log.FatalMsgFmt('Write addresses value in <%s> %s', [ClassName, log_tags]);
   end;
@@ -575,12 +575,12 @@ begin
     FOPCClient.SetTagBoolean(FOPCClient.FindSGroupSTag(group_name, 'tag0'), bValue);
 
     FOPCClient.Disconnect;
-    tags.Free;
+    tags.Destroy;
 
     Result := True;
   except
     FOPCClient.Disconnect;
-    tags.Free;
+    tags.Destroy;
 
     log.FatalMsgFmt('Write addresses value in <%s> %s', [ClassName, log_tags]);
   end;
@@ -638,12 +638,12 @@ begin
     FOPCClient.SetTagDouble(FOPCClient.FindSGroupSTag(group_name, 'tag0'), fValue);
 
     FOPCClient.Disconnect;
-    tags.Free;
+    tags.Destroy;
 
     Result := True;
   except
     FOPCClient.Disconnect;
-    tags.Free;
+    tags.Destroy;
 
     log.FatalMsgFmt('Write addresses value in <%s> %s', [ClassName, log_tags]);
   end;
