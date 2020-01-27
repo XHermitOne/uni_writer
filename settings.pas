@@ -1,5 +1,7 @@
 {
 Модуль поддержки настроек программы
+
+Версия: 0.0.2.1
 }
 unit settings;
 
@@ -74,20 +76,19 @@ uses
 
 constructor TICSettingsManager.Create;
 begin
-     inherited Create;
-     FContent := TIniDictionary.Create;
+  inherited Create;
+  FContent := TIniDictionary.Create;
 end;
 
 destructor TICSettingsManager.Destroy;
 begin
-     //FContent.Free;
-     inherited Destroy;
+  Free;
+  inherited Destroy;
 end;
 
 procedure TICSettingsManager.Free;
 begin
-   FContent.Free;
-   inherited Free;
+   FContent.Destroy;
 end;
 
 {

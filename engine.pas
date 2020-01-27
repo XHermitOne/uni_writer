@@ -212,15 +212,14 @@ end;
 
 destructor TICWriterProto.Destroy;
 begin
-  //Free;
   FRpcServer.Free;
   inherited Destroy;
 end;
 
 procedure TICWriterProto.Free;
 begin
-  FObjects.Free;
-  FSettingsManager.Free;
+  FObjects.Destroy;
+  FSettingsManager.Destroy;
   inherited Free;
 end;
 
