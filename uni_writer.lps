@@ -29,10 +29,10 @@
         <ComponentName Value="UniWriterDaemon"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="49"/>
         <CursorPos Y="77"/>
         <UsageCount Value="47"/>
-        <Loaded Value="True"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils\log.pas"/>
@@ -53,9 +53,6 @@
         <Filename Value="engine.pas"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="214"/>
-        <CursorPos X="5" Y="233"/>
         <UsageCount Value="47"/>
         <Loaded Value="True"/>
       </Unit5>
@@ -70,10 +67,11 @@
       <Unit7>
         <Filename Value="settings.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="25"/>
-        <CursorPos X="14" Y="4"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="69"/>
+        <CursorPos Y="89"/>
         <UsageCount Value="47"/>
+        <Loaded Value="True"/>
       </Unit7>
       <Unit8>
         <Filename Value="xml_rpc\DI.inc"/>
@@ -155,9 +153,11 @@
       <Unit17>
         <Filename Value="data_ctrl\remoute_opc_node.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="51" Y="9"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="125"/>
+        <CursorPos Y="140"/>
         <UsageCount Value="47"/>
+        <Loaded Value="True"/>
       </Unit17>
       <Unit18>
         <Filename Value="opc_client\opc_client.pas"/>
@@ -241,10 +241,11 @@
       <Unit27>
         <Filename Value="utils\dictionary.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="531"/>
-        <CursorPos X="15" Y="551"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="166"/>
+        <CursorPos Y="183"/>
         <UsageCount Value="41"/>
+        <Loaded Value="True"/>
       </Unit27>
       <Unit28>
         <Filename Value="utils\filefunc.pas"/>
@@ -258,11 +259,11 @@
       <Unit29>
         <Filename Value="utils\inifunc.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="45"/>
+        <CursorPos Y="66"/>
         <UsageCount Value="41"/>
+        <Loaded Value="True"/>
       </Unit29>
       <Unit30>
         <Filename Value="utils\keyboardfunc.pas"/>

@@ -1,3 +1,9 @@
+{
+Модуль удаленного узла OPC сервера
+
+Версия: 0.0.3.1
+}
+
 unit remoute_opc_node;
 
 {$mode objfpc}{$H+}
@@ -24,7 +30,7 @@ type
 
   public
     constructor Create;
-    procedure Free;
+    destructor Destroy; override;
 
     { Выбрать описания тегов из свойств }
     function CreateTags(): TStrDictionary;
@@ -127,12 +133,13 @@ begin
      FOPCClient := nil;
 end;
 
-procedure TICRemouteOPCNode.Free;
+destructor TICRemouteOPCNode.Destroy;
 begin
   if FOPCClient <> nil then
-     FOPCClient.Destroy;
-  inherited Free;
+    FOPCClient.Destroy;
+  inherited Destroy;
 end;
+
 
 {
 Фунция чтения данных

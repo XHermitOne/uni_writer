@@ -41,7 +41,6 @@ type
     public
       constructor Create(TheOwner: TComponent);
       destructor Destroy; override;
-      procedure Free;
 
       {
       Проинициализировать конфигурационные переменные в соответствии с настройками
@@ -86,7 +85,6 @@ type
       { Конструктор }
       constructor Create(TheOwner: TComponent);
       destructor Destroy; override;
-      procedure Free;
 
       {
       Записать значение в приемник данных
@@ -214,23 +212,17 @@ end;
 
 destructor TICWriterProto.Destroy;
 begin
-  // ВНИМАНИЕ! Из Destroy необходимо вызывать Free.
-  // В Free не должно быть вызова inherited Free.
-  // Тогда не происходит утечки памяти
-  Free;
-  inherited Destroy;
-end;
-
-procedure TICWriterProto.Free;
-begin
   if FRpcServer <> nil then
     FRpcServer.Destroy;
-  // ВНИМАНИЕ! Из Destroy необходимо вызывать Free.
-  // В Free не должно быть вызова inherited Free.
-  // Тогда не происходит утечки памяти
+
   FObjects.Destroy;
   FSettingsManager.Destroy;
-  //inherited Free;
+
+  // ВНИМАНИЕ! Нельзя использовать функции Free.
+  // Если объект создается при помощи Create, то удаляться из
+  // памяти должен с помощью Dуstroy
+  // Тогда не происходит утечки памяти
+  inherited Destroy;
 end;
 
 {
@@ -372,11 +364,6 @@ end;
 destructor TICWriter.Destroy;
 begin
   inherited Destroy;
-end;
-
-procedure TICWriter.Free;
-begin
-  inherited Free;
 end;
 
 { Записать значение в приемник данных }

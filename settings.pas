@@ -1,7 +1,7 @@
 {
 Модуль поддержки настроек программы
 
-Версия: 0.0.2.1
+Версия: 0.0.3.1
 }
 unit settings;
 
@@ -31,7 +31,6 @@ type
 
       constructor Create;
       destructor Destroy; override;
-      procedure Free;
 
       {Генерация имени настроечного INI файла}
       function GenIniFileName(): AnsiString;
@@ -72,7 +71,7 @@ var
 implementation
 
 uses
-    filefunc, log, config, strfunc;
+  filefunc, log, config, strfunc;
 
 constructor TICSettingsManager.Create;
 begin
@@ -82,13 +81,12 @@ end;
 
 destructor TICSettingsManager.Destroy;
 begin
-  Free;
+  FContent.Destroy;
+  // ВНИМАНИЕ! Нельзя использовать функции Free.
+  // Если объект создается при помощи Create, то удаляться из
+  // памяти должен с помощью Dуstroy
+  // Тогда не происходит утечки памяти
   inherited Destroy;
-end;
-
-procedure TICSettingsManager.Free;
-begin
-   FContent.Destroy;
 end;
 
 {
