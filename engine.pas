@@ -230,7 +230,7 @@ begin
   // Тогда не происходит утечки памяти
   FObjects.Destroy;
   FSettingsManager.Destroy;
-  inherited Free;
+  //inherited Free;
 end;
 
 {

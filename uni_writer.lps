@@ -11,7 +11,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="91"/>
         <CursorPos X="10" Y="98"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit0>
       <Unit1>
         <Filename Value="uni_daemonmapperunit.pas"/>
@@ -21,7 +21,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="27"/>
         <CursorPos X="98" Y="55"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit1>
       <Unit2>
         <Filename Value="uni_daemonunit.pas"/>
@@ -29,10 +29,10 @@
         <ComponentName Value="UniWriterDaemon"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="56"/>
-        <CursorPos Y="78"/>
-        <UsageCount Value="46"/>
+        <TopLine Value="49"/>
+        <CursorPos Y="77"/>
+        <UsageCount Value="47"/>
+        <Loaded Value="True"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils\log.pas"/>
@@ -40,23 +40,24 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="330"/>
         <CursorPos X="3" Y="279"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit3>
       <Unit4>
         <Filename Value="config.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="26"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit4>
       <Unit5>
         <Filename Value="engine.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="205"/>
-        <CursorPos X="120" Y="210"/>
-        <UsageCount Value="46"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="214"/>
+        <CursorPos X="5" Y="233"/>
+        <UsageCount Value="47"/>
+        <Loaded Value="True"/>
       </Unit5>
       <Unit6>
         <Filename Value="obj_proto.pas"/>
@@ -64,7 +65,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="168"/>
         <CursorPos Y="187"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit6>
       <Unit7>
         <Filename Value="settings.pas"/>
@@ -72,7 +73,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="25"/>
         <CursorPos X="14" Y="4"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit7>
       <Unit8>
         <Filename Value="xml_rpc\DI.inc"/>
@@ -81,7 +82,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit8>
       <Unit9>
         <Filename Value="xml_rpc\DIMime.pas"/>
@@ -90,7 +91,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit9>
       <Unit10>
         <Filename Value="xml_rpc\LibXmlParser.pas"/>
@@ -99,7 +100,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit10>
       <Unit11>
         <Filename Value="xml_rpc\XmlRpcClient.pas"/>
@@ -108,7 +109,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit11>
       <Unit12>
         <Filename Value="xml_rpc\XmlRpcCommon.pas"/>
@@ -117,7 +118,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit12>
       <Unit13>
         <Filename Value="xml_rpc\XmlRpcServer.pas"/>
@@ -126,7 +127,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit13>
       <Unit14>
         <Filename Value="xml_rpc\XmlRpcTypes.pas"/>
@@ -134,7 +135,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="238"/>
         <CursorPos X="3" Y="371"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit14>
       <Unit15>
         <Filename Value="data_ctrl\opc_server_node.pas"/>
@@ -142,21 +143,21 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="628"/>
         <CursorPos X="59" Y="644"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit15>
       <Unit16>
         <Filename Value="data_ctrl\reg_data_ctrl.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="37"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit16>
       <Unit17>
         <Filename Value="data_ctrl\remoute_opc_node.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="51" Y="9"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit17>
       <Unit18>
         <Filename Value="opc_client\opc_client.pas"/>
@@ -164,7 +165,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="147"/>
         <CursorPos X="15" Y="165"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit18>
       <Unit19>
         <Filename Value="opc_client\OPCCallback.pas"/>
@@ -173,7 +174,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit19>
       <Unit20>
         <Filename Value="opc_client\OPCCOMN.pas"/>
@@ -182,7 +183,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit20>
       <Unit21>
         <Filename Value="opc_client\OPCDA.pas"/>
@@ -191,7 +192,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit21>
       <Unit22>
         <Filename Value="opc_client\OPCError.pas"/>
@@ -200,7 +201,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit22>
       <Unit23>
         <Filename Value="opc_client\OPCSEC.pas"/>
@@ -209,7 +210,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit23>
       <Unit24>
         <Filename Value="opc_client\OPCTypes.pas"/>
@@ -218,7 +219,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit24>
       <Unit25>
         <Filename Value="opc_client\tag_list.pas"/>
@@ -226,7 +227,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="46"/>
         <CursorPos X="27" Y="60"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit25>
       <Unit26>
         <Filename Value="opc_client\type_value.pas"/>
@@ -235,7 +236,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit26>
       <Unit27>
         <Filename Value="utils\dictionary.pas"/>
@@ -243,7 +244,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="531"/>
         <CursorPos X="15" Y="551"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="41"/>
       </Unit27>
       <Unit28>
         <Filename Value="utils\filefunc.pas"/>
@@ -252,7 +253,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="41"/>
       </Unit28>
       <Unit29>
         <Filename Value="utils\inifunc.pas"/>
@@ -261,7 +262,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="41"/>
       </Unit29>
       <Unit30>
         <Filename Value="utils\keyboardfunc.pas"/>
@@ -270,7 +271,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="41"/>
       </Unit30>
       <Unit31>
         <Filename Value="utils\memfunc.pas"/>
@@ -279,7 +280,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="41"/>
       </Unit31>
       <Unit32>
         <Filename Value="utils\strfunc.pas"/>
@@ -288,7 +289,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="41"/>
       </Unit32>
       <Unit33>
         <Filename Value="utils\sysfunc.pas"/>
@@ -297,7 +298,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="41"/>
       </Unit33>
       <Unit34>
         <Filename Value="opc_client\OPC.res"/>
@@ -306,7 +307,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="41"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit34>
       <Unit35>
@@ -347,9 +348,6 @@
         <UsageCount Value="10"/>
       </Unit39>
     </Units>
-    <General>
-      <ActiveWindowIndexAtStart Value="-1"/>
-    </General>
     <JumpHistory HistoryIndex="-1"/>
     <RunParams>
       <FormatVersion Value="2"/>
