@@ -52,8 +52,8 @@
       <Unit5>
         <Filename Value="engine.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
         <TopLine Value="205"/>
         <CursorPos X="120" Y="210"/>
         <UsageCount Value="46"/>

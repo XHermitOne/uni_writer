@@ -1,7 +1,7 @@
 {
 Модуль классов движка
 
-Версия: 0.0.3.1
+Версия: 0.0.3.2
 }
 
 unit engine;
@@ -202,6 +202,8 @@ constructor TICWriterProto.Create(TheOwner: TComponent);
 begin
   inherited Create;
 
+  FRpcServer := nil;
+
   // Менеджер настроек
   FSettingsManager := TICSettingsManager.Create;
 
@@ -212,12 +214,20 @@ end;
 
 destructor TICWriterProto.Destroy;
 begin
-  FRpcServer.Free;
+  // ВНИМАНИЕ! Из Destroy необходимо вызывать Free.
+  // В Free не должно быть вызова inherited Free.
+  // Тогда не происходит утечки памяти
+  Free;
   inherited Destroy;
 end;
 
 procedure TICWriterProto.Free;
 begin
+  if FRpcServer <> nil then
+    FRpcServer.Destroy;
+  // ВНИМАНИЕ! Из Destroy необходимо вызывать Free.
+  // В Free не должно быть вызова inherited Free.
+  // Тогда не происходит утечки памяти
   FObjects.Destroy;
   FSettingsManager.Destroy;
   inherited Free;
@@ -580,6 +590,8 @@ end;
 procedure TICWriter.StopServer;
 begin
   FRpcServer.Active := False;
+  FRpcServer.Destroy;
+  FRpcServer := nil;
 end;
 
 { Тестовая функция для проверки удаленного вызова процедур }
